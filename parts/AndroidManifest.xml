@@ -23,68 +23,87 @@
 
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
     <uses-sdk
         android:minSdkVersion="24"
-        android:targetSdkVersion="24"/>
-        
+        android:targetSdkVersion="24" />
+
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/device_settings_app_name"
         android:persistent="true"
-        android:theme="@style/Theme.SubSettingsBase"
-        android:defaultToDeviceProtectedStorage="true"
-        android:directBootAware="true">
+        android:theme="@style/Theme.SubSettingsBase">
 
-        <receiver android:name=".BootCompletedReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+        <receiver android:name=".BootCompletedReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".dolby.DolbyActivity"
+            android:label="@string/dolby_title"
+            android:exported="false"
+            android:theme="@style/Theme.SubSettingsBase">
+            <intent-filter>
+                <action android:name="com.android.settings.action.IA_SETTINGS" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.category"
+                       android:value="com.android.settings.category.ia.sound" />
+            <meta-data android:name="com.android.settings.summary"
+                       android:resource="@string/dolby_summary" />
+        </activity>
+
         <service
-            android:name=".thermal.ThermalService"
-            android:permission="ThermalService">
+            android:name=".doze.DozeService"
+            android:permission="XiaomiDozeService">
         </service>
 
         <activity
-            android:name=".thermal.ThermalActivity"
-            android:label="@string/thermal_title"
-            android:theme="@style/Theme.SubSettingsBase_v31">
+            android:name=".doze.DozeSettingsActivity"
+            android:label="@string/ambient_display_title"
+            android:theme="@style/Theme.SubSettingsBase">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
             </intent-filter>
             <meta-data
                 android:name="com.android.settings.category"
-                android:value="com.android.settings.category.ia.system" />
+                android:value="com.android.settings.category.ia.display" />
+        </activity>
+
+        <activity
+            android:name=".gpu.GPUActivity"
+            android:label="@string/gpu_title"
+            android:theme="@style/Theme.SubSettingsBase">
+            <intent-filter>
+                <action android:name="com.android.settings.action.IA_SETTINGS" />
+            </intent-filter>
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.battery" />
             <meta-data
                 android:name="com.android.settings.summary"
-                android:resource="@string/thermal_summary" />
-	    <meta-data
-                android:name="com.android.settings.icon"
-                android:resource="@drawable/ic_thermal_settings" />
-            <meta-data
-                android:name="com.android.settings.order"
-                android:value="99" />
+                android:resource="@string/gpu_summary" />
         </activity>
 
         <activity
             android:name=".refreshrate.RefreshActivity"
             android:label="@string/refresh_title"
             android:exported="false"
-            android:theme="@style/Theme.SubSettingsBase_v31">
+            android:theme="@style/Theme.SubSettingsBase">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
             </intent-filter>
             <meta-data
                 android:name="com.android.settings.category"
-                android:value="com.android.settings.category.ia.system" />
+                android:value="com.android.settings.category.ia.display" />
             <meta-data
                 android:name="com.android.settings.summary"
                 android:resource="@string/refresh_summary" />
-            <meta-data android:name="com.android.settings.icon"
-                       android:resource="@drawable/ic_refresh_settings" />                
         </activity>
 
         <service
@@ -93,19 +112,15 @@
             android:permission="RefreshService">
         </service>
 
-        <activity
-            android:name=".speaker.ClearSpeakerActivity"
-            android:label="@string/clear_speaker_title">
+        <service
+            android:name=".RefreshRateTileService"
+            android:icon="@drawable/ic_qs_refresh_rate"
+            android:label="@string/refresh_rate_tile_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="com.android.settings.action.IA_SETTINGS" />
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
             </intent-filter>
-            <meta-data
-                android:name="com.android.settings.category"
-                android:value="com.android.settings.category.ia.sound" />
-            <meta-data
-                android:name="com.android.settings.summary"
-                android:resource="@string/clear_speaker_summary" />
-        </activity>
-        
+        </service>
+
     </application>
 </manifest>
