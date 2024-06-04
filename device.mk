@@ -481,8 +481,8 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi.supplicant@1.4.vendor
 
 # USB
-PRODUCT_PACKAGES += \
-    android.hardware.usb-service.mediatek
+# PRODUCT_PACKAGES += \
+#   android.hardware.usb-service.mediatek
 
 # Xiaomi Parts
 PRODUCT_PACKAGES += \
